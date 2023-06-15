@@ -67,19 +67,13 @@ warning('off');
 % -----------------------------------------------------
 
 for j=1:50
-%%
 
     for i=1:NN
         epsilon.eps_1=10^(-4);
         epsilon.eps_2=10^(-4);
         epsilon.eps_3=10^(-4);
-        %for i=1:1
 
-        %%
-% tspan = [0 2*1e-3];
-% option.MaxStep=1e-3;
-% option.InitialStep=1e-3;
-      %  [t{i,j},y{i,j}] = ode45(@(t,xx) ODE(t,xx,X,epsilon,n,RR), tspan, y0{i,j},option);
+        %% Call of ODE45 solver
         [t{i,j},y{i,j}] = ode45(@(t,xx) ODE(t,xx,X,epsilon,dim(i),RR,mu(i)), tspan, y0{i,j});
         %%
         
@@ -99,12 +93,8 @@ for j=1:50
         % A_2(:,i)=A_2(:,i)/norm(A_2(:,i));
         % A_3(:,i)=A_3(:,i)/norm(A_3(:,i));
         Error=X-double(full(ktensor(ones(RR,1),B{i,1},B{i,2},B{i,3})));
+        % Display erros
         ee(i,j)=norm(Error(:))/norm(X(:))
-        % ee=[e{i,j},ee];
-        % norm(Error(:))/norm(X(:))
-        % norm(y{i}(end,:)-X(:))
-        % k=k+1;
-
         Grad{i} = gradientCPD(B(i,:),X,RR);
 
 
@@ -139,6 +129,7 @@ for j=1:50
 
 
     end
+    % Call of PSO method
     tt_h=min(min(ee));
     [tt_1,tt_2]=find(ee==tt_h);
     GH=y{tt_1(1),tt_2(1)}(end,:);
@@ -148,37 +139,9 @@ for j=1:50
         [y0{i,j+1},V{i}]=PSO_Code(V{i},z{i}(end,:),y{i,jj}(end,:),GH);
         w=w+norm(y{i,jj}(end,:)-GH);
     end
+    % Display PSO advancement
     DI=w/NN
 
-    %% update rho
-    % Rho to compute the damp parameter
-    % mu = mu0/sqrt(j);
-    
-    %% update damp parameter
-%     if j>1
-%         for i=1:NN
-%              Rr = Grad{i};
-%              err= ee(i,j-1)*norm(X(:));
-%              err2 = ee(i,j)*norm(X(:));
-%              d = cellfun(@(x,y) x(:)-y(:),B(i,:),B_prev(i,:),'uni',0);
-%              d = cell2mat(d(:));
-%              U = B(i,:);
-%              rho=real((err-err2)/(d(:)'*(Rr+mu(i)*d(:))));   
-%               
-%             if err2>err               %%% step is not accepted
-%                 mu(i)=mu(i)*nu(i); nu(i)=2*nu(i);                                      % Eq. (5.7)
-%                 B(i,:) = B_prev(i,:);
-%             else
-%                 nu(i)=2;
-%                 mu(i)=mu(i)*max([1/3 1-(2*rho-1)^3]);                         % Eq. (5.7)
-%                  
-%             end
-%             mu(i)=min(200,mu(i));
-%         end
-        
-%   end
-
-    B_prev = B;
 end
 toc(tim)
 %%
