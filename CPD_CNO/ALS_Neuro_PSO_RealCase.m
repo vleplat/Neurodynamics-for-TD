@@ -11,9 +11,8 @@ load('V.mat');
 AA = V;
 clear V;
 K=180;
+
 X=double(AA(:,:,1:K));
-% X = X*5;
-% X = max(X,eps);
 X=X/max(X(:));
 R=12;
 dim(1) = K;
@@ -65,18 +64,16 @@ warning('off');
 %% ----------------------------------------------------
 % Solve set of ODE by CNO
 % -----------------------------------------------------
-
+% Main optimization loop
 for j=1:50
-
+    % Loop on NN
     for i=1:NN
         epsilon.eps_1=10^(-4);
         epsilon.eps_2=10^(-4);
         epsilon.eps_3=10^(-4);
-
-        %% Call of ODE45 solver
+        %%-Call of ODE45 solver
         [t{i,j},y{i,j}] = ode45(@(t,xx) ODE(t,xx,X,epsilon,dim(i),RR,mu(i)), tspan, y0{i,j});
-        %%
-        
+
         z{i}=y{i,j};
         % zz{k}=y{i}(end,:);
         %%Reinitialization
@@ -88,10 +85,6 @@ for j=1:50
         idx2 = sizeX(1)*R+sizeX(2)*R;
         B{i,2}=reshape(z{i}(end,idx1+1:idx2),[sizeX(2),RR]);
         B{i,3}=reshape(z{i}(end,idx2+1:nn),[sizeX(3),RR]);
-        %%Orthonormalize the factors
-        % A_1(:,i)=A_1(:,i)/norm(A_1(:,i));
-        % A_2(:,i)=A_2(:,i)/norm(A_2(:,i));
-        % A_3(:,i)=A_3(:,i)/norm(A_3(:,i));
         Error=X-double(full(ktensor(ones(RR,1),B{i,1},B{i,2},B{i,3})));
         % Display erros
         ee(i,j)=norm(Error(:))/norm(X(:))
@@ -209,100 +202,100 @@ toc(tim)
 %%
 function [dydt,G]=ODE(t,xx,X,epsilon,n,R,mu)
 %%Tensor decomposition based on the colloborative neurodynamic optimization
-%% size of dynamic system
-% [n,R]=size(A_1);
-sizeX = size(X);
-% dydt=zeros(3*n*R,1);
-dydt=zeros(sum(sizeX*R),1);
-nn=sum(sizeX*R);
-idx1 = sizeX(1)*R;
-x1=reshape(xx(1:idx1),[sizeX(1),R]);
-idx2 = sizeX(1)*R+sizeX(2)*R;
-x2=reshape(xx(idx1+1:idx2),[sizeX(2),R]);
-x3=reshape(xx(idx2+1:nn),[sizeX(3),R]);
-%% epsilon
-epsilon_1=epsilon.eps_1;
-epsilon_2=epsilon.eps_2;
-epsilon_3=epsilon.eps_3;
-%% Gradient computation
-% gradient_1=x1*((x3'*x3).*((x2'*x2)))-unfold(X,1)*(khatrirao_fast(x3,x2));
-% gradient_2=x2*((x3'*x3).*((x1'*x1)))-unfold(X,2)*(khatrirao_fast(x3,x1));
-% gradient_3=x3*((x2'*x2).*((x1'*x1)))-unfold(X,3)*(khatrirao_fast(x2,x1));
-x3tx3 = x3'*x3;
-x2tx2 = x2'*x2;
-x1tx1 = x1'*x1;
-H1 = ((x3tx3).*((x2tx2)));
-tX = tensor(X);
-gradient_1=x1*H1-mttkrp(tX,{x1,x2,x3},1);
-H2 = ((x3tx3).*((x1tx1)));
-gradient_2=x2*H2-mttkrp(tX,{x1,x2,x3},2);
-H3 = ((x2tx2).*((x1tx1)));
-gradient_3=x3*H3-mttkrp(tX,{x1,x2,x3},3);
-
-%% Neurodynamic model
-% v = SimplexProj(x1 - gradient_1);
-delta = mu;
-[k,~] = size(x1);
-% dIp = sparse(delta*eye(k*R));
-%H = sparse(kron(H1',eye(k))+delta*eye(k*R));% + dIp;
-H=H1+delta*eye(R);
-% [alphak,step] = step_CubReg_Newton(H,gradient_1);
-v = max(x1 - gradient_1/H,0);
-% v = max(x1 - alphak*step,0);
-
-%v = max(x1(:) - H\gradient_1(:),0);
-dydt(1:idx1)=(1/epsilon_1)*(-x1(:)+v(:));
-% v = SimplexProj(x2 - gradient_2);
-[k,~] = size(x2);
-% dIp = sparse(delta*eye(k*R));
-%H = sparse(kron(H2',eye(k))+delta*eye(k*R));% + dIp;
-%v = max(x2(:) - H\gradient_2(:),0);
-H=H2+delta*eye(R);
-% [alphak,step] = step_CubReg_Newton(H,gradient_2);
-v = max(x2 - gradient_2/H,0);
-% v = max(x2 - alphak*step,0);
-
-dydt(idx1+1:idx2)=(1/epsilon_2)*(-x2(:)+ v(:));
-[k,~] = size(x3);
-% dIp = sparse(delta*eye(k*R));
-%H = sparse(kron(H3',eye(k))+delta*eye(k*R));% + dIp;
-H=H3+delta*eye(R);
-% [alphak,step] = step_CubReg_Newton(H,gradient_3);
-v = max(x3 - gradient_3/H,0);
-% v = max(x3 - alphak*step,0);
-
-%v = max(x3(:) - H\gradient_3(:),0);
-% v = SimplexProj(x3-gradient_3);
-dydt(idx2+1:nn)=(1/epsilon_3)*(-x3(:)+v(:));
+    %% size of dynamic system
+    sizeX = size(X);
+    dydt=zeros(sum(sizeX*R),1);
+    nn=sum(sizeX*R);
+    idx1 = sizeX(1)*R;
+    x1=reshape(xx(1:idx1),[sizeX(1),R]);
+    idx2 = sizeX(1)*R+sizeX(2)*R;
+    x2=reshape(xx(idx1+1:idx2),[sizeX(2),R]);
+    x3=reshape(xx(idx2+1:nn),[sizeX(3),R]);
+    %% epsilon
+    epsilon_1=epsilon.eps_1;
+    epsilon_2=epsilon.eps_2;
+    epsilon_3=epsilon.eps_3;
+    %% Gradient computation
+    x3tx3 = x3'*x3;
+    x2tx2 = x2'*x2;
+    x1tx1 = x1'*x1;
+    H1 = ((x3tx3).*((x2tx2)));
+    tX = tensor(X);
+    gradient_1=x1*H1-mttkrp(tX,{x1,x2,x3},1);
+    H2 = ((x3tx3).*((x1tx1)));
+    gradient_2=x2*H2-mttkrp(tX,{x1,x2,x3},2);
+    H3 = ((x2tx2).*((x1tx1)));
+    gradient_3=x3*H3-mttkrp(tX,{x1,x2,x3},3);
+    
+    %% Neurodynamic model
+    %---------
+    % Factor 1
+    % --------
+    % Preconditioning ALS approach
+    delta = mu;
+    H=H1+delta*eye(R);
+    v = max(x1 - gradient_1/H,0);
+    % v = SimplexProj(x1 - gradient_1/H);
+    
+    % Cubic regularized approach
+    % [alphak,step] = step_CubReg_Newton(H,gradient_1);
+    % v = max(x1 - alphak*step,0);
+    
+    % computing dydt for ODE solver
+    dydt(1:idx1)=(1/epsilon_1)*(-x1(:)+v(:));
+    
+    %---------
+    % Factor 2
+    % --------
+    % Preconditioning ALS approach
+    H=H2+delta*eye(R);
+    v = max(x2 - gradient_2/H,0);
+    % v = SimplexProj(x2 - gradient_2/H);
+    
+    % Cubic regularized approach
+    % [alphak,step] = step_CubReg_Newton(H,gradient_2);
+    % v = max(x2 - alphak*step,0);
+    
+    % computing dydt for ODE solver
+    dydt(idx1+1:idx2)=(1/epsilon_2)*(-x2(:)+ v(:));
+    
+    %---------
+    % Factor 3
+    % --------
+    % Preconditioning ALS approach
+    H=H3+delta*eye(R);
+    v = max(x3 - gradient_3/H,0);
+    % v = SimplexProj(x3 - gradient_3/H);
+    
+    % Cubic regularized approach
+    % [alphak,step] = step_CubReg_Newton(H,gradient_3);
+    % v = max(x3 - alphak*step,0);
+    
+    % computing dydt for ODE solver
+    dydt(idx2+1:nn)=(1/epsilon_3)*(-x3(:)+v(:));
 
 end
 
 function Grad = gradientCPD(xx,X,R)
     %% size of dynamic system
-% [n,R]=size(A_1);
-sizeX = size(X);
-
-nn=sum(sizeX*R);
-idx1 = sizeX(1)*R;
-x1 = xx{1};
-x2 = xx{2};
-x3 = xx{3};
-
-%% Gradient computation
-% gradient_1=x1*((x3'*x3).*((x2'*x2)))-unfold(X,1)*(khatrirao_fast(x3,x2));
-% gradient_2=x2*((x3'*x3).*((x1'*x1)))-unfold(X,2)*(khatrirao_fast(x3,x1));
-% gradient_3=x3*((x2'*x2).*((x1'*x1)))-unfold(X,3)*(khatrirao_fast(x2,x1));
-x3tx3 = x3'*x3;
-x2tx2 = x2'*x2;
-x1tx1 = x1'*x1;
-H1 = ((x3tx3).*((x2tx2)));
-tX = tensor(X);
-gradient_1=x1*H1-mttkrp(tX,{x1,x2,x3},1);
-H2 = ((x3tx3).*((x1tx1)));
-gradient_2=x2*H2-mttkrp(tX,{x1,x2,x3},2);
-H3 = ((x2tx2).*((x1tx1)));
-gradient_3=x3*H3-mttkrp(tX,{x1,x2,x3},3);
-Grad = [vec(gradient_1);vec(gradient_2);vec(gradient_3)];
+    % [n,R]=size(A_1);
+    sizeX = size(X);
+    x1 = xx{1};
+    x2 = xx{2};
+    x3 = xx{3};
+    
+    %% Gradient computation
+    x3tx3 = x3'*x3;
+    x2tx2 = x2'*x2;
+    x1tx1 = x1'*x1;
+    H1 = ((x3tx3).*((x2tx2)));
+    tX = tensor(X);
+    gradient_1=x1*H1-mttkrp(tX,{x1,x2,x3},1);
+    H2 = ((x3tx3).*((x1tx1)));
+    gradient_2=x2*H2-mttkrp(tX,{x1,x2,x3},2);
+    H3 = ((x2tx2).*((x1tx1)));
+    gradient_3=x3*H3-mttkrp(tX,{x1,x2,x3},3);
+    Grad = [vec(gradient_1);vec(gradient_2);vec(gradient_3)];
 end
 %% --------------
 % Data visu.
