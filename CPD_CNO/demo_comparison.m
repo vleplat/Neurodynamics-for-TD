@@ -59,7 +59,7 @@ options.NonNegative = 1;
 
 %%
 tic
-for krun = 1:1
+for krun = 1:10
     [t_ode,yode] = ode45(@(t,xx) ODE(t,xx,X,epsilon,R), tspan, theta,options);
 
     clear err_ode2;
