@@ -1,0 +1,24 @@
+Nonnegative tensor factorization package
+June 2011
+
+=============================================
+This package includes the following files:
+
+- The three main functions that can be used to compute the nonnegative 3rd-order tensor CP decomposition. 
+
+They are called gradP.m, cgP.m, bfgsP.m, which are respectively a gradient based algorithm, a conjugate gradient based algorithm and a quasi-Newton approach based algorithm. 
+
+The first one is the slowest algorithm in terms of convergence speed. The second one is a good compromise between performances and convergence speed. The last one is often the fastest algorithm for small tensors but is not really applicable for large tensors, because it requires the manipulation of large matrices, which is time and memory consuming.
+
+
+- Two demo files: demo.m  and  demo2.m
+They allow to compare the three algorithms developed, in terms of a reconstruction error. The program demo.m uses default parameters (no backtracking, no penalization), whereas demo2.m allows to choose execution parameters via a graphical interface. More details are included in the header of the demo2.m file, as well as in the SigPro'2011 paper [3]. Note that these iterative algorithms are initialized with random values.
+
+
+- Remaining files are common tools used to compute the NonNegative CP decomposition.
+
+=============================================
+
+REFERENCE
+
+[3] J-P. Royer, N. Thirion-Moreau, and P. Comon, ``Computing the polyadic decomposition of nonnegative third order tensors,'' Signal Processing, Elsevier, 91(9), September 2011. Downloadable at http://hal.archives-ouvertes.fr/hal-00618729
