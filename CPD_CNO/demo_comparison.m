@@ -195,9 +195,9 @@ title('Benchmark results','fontsize',fontSize,'interpreter','latex')
 grid on
 
 figure(2)
-X = categorical({'ODE','ANLS','Proco-ALS','CCG','GradP','CGP','BFGSP','HALS','MUR'});
-X = reordercats(X,{'ODE','ANLS','Proco-ALS','CCG','GradP','CGP','BFGSP','HALS','MUR'});
-Y = [time_0 time_1 time_2 time_3 time_4 time_5 time_6 time_7 time_7];
-bar(X,Y)
+Xg = categorical({'ODE','ANLS','Proco-ALS','CCG','GradP','CGP','BFGSP','HALS','MUR'});
+Xg = reordercats(Xg,{'ODE','ANLS','Proco-ALS','CCG','GradP','CGP','BFGSP','HALS','MUR'});
+Yg = [time_0 time_1 time_2 time_3 time_4 time_5 time_6 time_7 time_7];
+bar(Xg,Yg)
 ylabel('Running time (Second)')
 
