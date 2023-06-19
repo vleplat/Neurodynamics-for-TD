@@ -22,3 +22,6 @@ addpath("libraries/NNtensorPackage_mfiles/NNtensorPackage_mfiles/")
 addpath("Utils/");
 addpath("Datasets/");
 % addpath(genpath(pwd))
+
+% Data set
+addpath("Datasets/AVIRIS_Cuprite/")

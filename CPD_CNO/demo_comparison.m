@@ -8,8 +8,8 @@ clc;clear all; close all
 ex = 'rand';
 switch  ex
     case 'rand'
-        n=9;  
-        R=10;      
+        n=30;  
+        R=40;      
         % Generating a nonnegative tensor
         A{1}=rand(n,R);
         A{2}=rand(n,R);
