@@ -94,6 +94,7 @@ opts.maxiters = options.maxIter;
 R = options.R;
 iter = options.maxIter;
 t=1:iter;
+close all
 
 %%% Convergence plots
 fontSize = 14;
@@ -110,7 +111,7 @@ grid on
 
 
 
-%%% Transient responses
+%%% Transient responses - Semi-implicit
 figure(2)
 for i=1:iter
     Ahh1(i,:)=A_1{i}(:)';
@@ -137,6 +138,35 @@ plot(t,Ahh3(:,1:end),'LineWidth',1.5)
 title('Transient behaviors of CNO')
 xlabel('Time (t)')
 ylabel('A^{(3)}')
+
+%%% Transient responses - Fully explicit
+figure(5)
+for i=1:iter
+    Ahh1(i,:)=A_1_t2{i}(:)';
+end
+plot(t,Ahh1(:,1:end),'LineWidth',1.5)
+title('Transient behaviors of CNO')
+xlabel('Time (t)')
+ylabel('A^{(1)}')
+
+figure(6)
+for i=1:iter
+    Ahh2(i,:)=A_2_t2{i}(:)';
+end
+plot(t,Ahh2(:,1:end),'LineWidth',1.5)
+title('Transient behaviors of CNO')
+xlabel('Time (t)')
+ylabel('A^{(2)}')
+
+figure(7)
+for i=1:iter
+    Ahh3(i,:)=A_3_t2{i}(:)';
+end
+plot(t,Ahh3(:,1:end),'LineWidth',1.5)
+title('Transient behaviors of CNO')
+xlabel('Time (t)')
+ylabel('A^{(3)}')
+
 
 %%% cuprite - Display estimated spectral signatures
 if dataSetSel == 4
