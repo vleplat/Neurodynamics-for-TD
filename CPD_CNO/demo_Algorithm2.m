@@ -112,60 +112,95 @@ grid on
 
 
 %%% Transient responses - Semi-implicit
-figure(2)
+
 for i=1:iter
     Ahh1(i,:)=A_1{i}(:)';
-end
-plot(t,Ahh1(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
-xlabel('Time (t)')
-ylabel('A^{(1)}')
-
-figure(3)
-for i=1:iter
     Ahh2(i,:)=A_2{i}(:)';
-end
-plot(t,Ahh2(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
-xlabel('Time (t)')
-ylabel('A^{(2)}')
-
-figure(4)
-for i=1:iter
     Ahh3(i,:)=A_3{i}(:)';
 end
-plot(t,Ahh3(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
+
+figure;
+subplot(2,2,1);
+plot(t,Ahh1(:,1:end));
+title('TR - Factor 1 - SE')
+ylabel('A^{(1)}')
+xlabel('Time (t)')
+
+subplot(2,2,2);
+plot(t,Ahh2(:,1:end));
+title('TR - Factor 2 - SE')
+ylabel('A^{(2)}')
+xlabel('Time (t)')
+
+subplot(2,2,[3,4]);
+plot(t,Ahh3(:,1:end));
+title('TR - Factor 3 - SE')
 xlabel('Time (t)')
 ylabel('A^{(3)}')
+%figure(2)
+% plot(t,Ahh1(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(1)}')
+
+%figure(3)
+% plot(t,Ahh2(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(2)}')
+
+% figure(4)
+% plot(t,Ahh3(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(3)}')
+
+
 
 %%% Transient responses - Fully explicit
-figure(5)
+
 for i=1:iter
     Ahh1(i,:)=A_1_t2{i}(:)';
-end
-plot(t,Ahh1(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
-xlabel('Time (t)')
-ylabel('A^{(1)}')
-
-figure(6)
-for i=1:iter
     Ahh2(i,:)=A_2_t2{i}(:)';
-end
-plot(t,Ahh2(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
-xlabel('Time (t)')
-ylabel('A^{(2)}')
-
-figure(7)
-for i=1:iter
     Ahh3(i,:)=A_3_t2{i}(:)';
 end
-plot(t,Ahh3(:,1:end),'LineWidth',1.5)
-title('Transient behaviors of CNO')
+figure;
+subplot(2,2,1);
+plot(t,Ahh1(:,1:end));
+title('TR - Factor 1 - FE')
+ylabel('A^{(1)}')
+xlabel('Time (t)')
+
+subplot(2,2,2);
+plot(t,Ahh2(:,1:end));
+title('TR - Factor 2 - FE')
+ylabel('A^{(2)}')
+xlabel('Time (t)')
+
+subplot(2,2,[3,4]);
+plot(t,Ahh3(:,1:end));
+title('TR - Factor 3 - FE')
 xlabel('Time (t)')
 ylabel('A^{(3)}')
+% figure(5)
+% plot(t,Ahh1(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(1)}')
+% 
+% figure(6)
+% plot(t,Ahh2(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(2)}')
+% 
+% figure(7)
+% plot(t,Ahh3(:,1:end),'LineWidth',1.5)
+% title('Transient behaviors of CNO')
+% xlabel('Time (t)')
+% ylabel('A^{(3)}')
+
+
 
 
 %%% cuprite - Display estimated spectral signatures
