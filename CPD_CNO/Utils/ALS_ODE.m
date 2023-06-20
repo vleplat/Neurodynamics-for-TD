@@ -1,4 +1,4 @@
-function [err_ode,err_ode2,cpu_time] = ALS_ODE(X,epsilon,theta,tspan,options)
+function [err_ode,err_ode2,cpu_time,B] = ALS_ODE(X,epsilon,theta,tspan,options)
 %ALS_ODE computes the nonnegative CPD of an input tensor X
 %-------------------------------------------------------------
 % Inputs:
@@ -12,6 +12,7 @@ function [err_ode,err_ode2,cpu_time] = ALS_ODE(X,epsilon,theta,tspan,options)
 %       - err_ode: 
 %       - err_ode2:
 %       - cpu_time: the cpu time.
+%       - B: cell of arrays with the factors of the CPD
 %-------------------------------------------------------------
 
 % Loading parameters
@@ -49,5 +50,6 @@ end
 % Return variables
 
 cpu_time = toc(tim);
+B = Bnew;
 
 end

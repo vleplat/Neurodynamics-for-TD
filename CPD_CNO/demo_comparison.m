@@ -71,7 +71,7 @@ options.R = R;
 options.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
 
 % Call of solver
-[err_ode,err_ode2,cpu_time] = ALS_ODE(X,epsilon,theta0,tspan,options);
+[err_ode,err_ode2,cpu_time,B_ode] = ALS_ODE(X,epsilon,theta0,tspan,options);
 time_0 = cpu_time;
 
 %% ------------------------------------------------------------------------
