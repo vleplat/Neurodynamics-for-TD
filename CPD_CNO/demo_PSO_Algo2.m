@@ -1,4 +1,5 @@
 clear all;clc;close all;
+warning("off");
 %% ----------------------------------------------------
 % Data loading
 % -----------------------------------------------------
@@ -70,8 +71,8 @@ switch dataSetSel
     
     case 7
         disp('synthetic data set selected...')
-        n=9;  %30
-        R=13; %45     
+        n=30;  %30
+        R=45; %45     
         % Generating a nonnegative tensor
         A{1}=rand(n,R);
         A{2}=rand(n,R);
@@ -117,6 +118,7 @@ end
 %%% Main parameters
 maxIter = 10;
 verbose = 1;
+selAlgo = 'discrete' ; % 'discrete'
 
 %%% Init of misc variables
 ee = zeros(NN,maxIter);
@@ -134,13 +136,15 @@ options_CS.R = R;
 options_CS.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
 
 %%% Parameters for the Discrete Solver
-options_DS.maxIter = 500;
-options_DS.verbose = 1;
+options_DS.maxIter = 300;
+options_DS.verbose = 0;
 options_DS.initType = 3;
 options_DS.R = R; %11 for Yale, 12 for Cuprite
 options_DS.beta =.2;
 options_DS.alpha =.2;
 options_DS.delta = 0;
+options_DS.AlgoSel = 3;
+options_DS.preCondiSel = 1;
 
 %%% Init for velocity vectors for PSO method
 fprintf('--------------------------------------------------------------------------------------')
@@ -161,10 +165,25 @@ for j=1:maxIter
 
     %%% Loop on each RNN
     for i=1:NN
-        %%% Call of ODE45-based solver
-        [err_ode,err_ode2,cpu_time,B] = ALS_ODE(X,epsilon,y0{i,1},tspan,options_CS);
+        switch selAlgo
+            case 'continuous'
+                %%% Call of ODE45-based solver
+                [err_ode,err_ode2,cpu_time,B] = ALS_ODE(X,epsilon,y0{i,1},tspan,options_CS);
+                y{i,j} = [B{1}(:);B{2}(:);B{3}(:)];
+            case 'discrete'
+                %%% Call of Discrete Solver
+                options_DS.U0{1} = reshape(y0{i,1}(1:sizeX(1)*R),[sizeX(1) R]);
+                options_DS.U0{2} = reshape(y0{i,1}(sizeX(1)*R+1:sizeX(1)*R+sizeX(2)*R),[sizeX(2) R]);
+                options_DS.U0{3} = reshape(y0{i,1}(sizeX(1)*R + sizeX(2)*R + 1:end),[sizeX(3) R]);
+                [err_ode,cpu_time,A_1,A_2,A_3,lamTab] = Algorithm2(X,options_DS);
+                y{i,j} = [A_1{end}(:);A_2{end}(:);A_3{end}(:)];
+            otherwise
+                disp('wrong selection for solver...')
+            return
+        end
+    
         ee(i,j) = err_ode(end);
-        y{i,j} = [B{1}(:);B{2}(:);B{3}(:)];
+        
     end
 
     %%% Print errors for each particle
