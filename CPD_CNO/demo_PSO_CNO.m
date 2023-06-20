@@ -96,7 +96,9 @@ options_gen.NN = 6;
 options_gen.R = R;
 options_gen.maxIter = 10;
 options_gen.verbose = 1;
-options_gen.selAlgo = 'discrete' ; % 'discrete','continuous'
+options_gen.selAlgo = 'discrete' ; 
+% 'discrete'   : Algorithm 2
+% 'continuous' : ALS + ODE45 
 options_gen.initType = 1;
 
 %%% Parameters for solver based on ode45
