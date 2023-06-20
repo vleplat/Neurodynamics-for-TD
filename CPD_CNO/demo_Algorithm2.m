@@ -35,6 +35,19 @@ switch dataSetSel
         [Xsub] = SanDiego_preProc(1);
         AA=permute(reshape(Xsub,[5,400,400]),[2,3,1]);
         K=5;
+    case 6
+        disp('mnist data set selected...')
+        load('mnist_all.mat');
+        AA_cell{1}=test0; AA_cell{2}=test1; AA_cell{3}=test2;
+        AA_cell{4}=test3; AA_cell{5}=test4; AA_cell{6}=test5;
+        AA_cell{7}=test6; AA_cell{8}=test7; AA_cell{9}=test8;
+        AA_cell{10}=test9; 
+        for j = 1:10
+            for i=1:140
+                AA(:,:,(j-1)*140+i) = (reshape(AA_cell{j}(i,:),[28,28]))';
+            end
+        end
+        K=1400;
 
     otherwise
         disp('wrong selection for the data set...')
@@ -84,7 +97,9 @@ options.AlgoSel = 2;
 
 % HALS
 opts = ncp_hals;
-opts.init = {'rand' 'rand' 'rand' };
+% opts.init = {'rand' 'rand' 'rand' };
+B0{1} = A_10;B0{2} = A_20;B0{3} = A_30;
+opts.init = B0;
 opts.maxiters = options.maxIter;
 [P,output] = ncp_hals(tX,options.R,opts);
 
