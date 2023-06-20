@@ -11,6 +11,7 @@ switch dataSetSel
         K=400;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=10;
 
     case 2
         disp('Yale data set selected...')
@@ -21,6 +22,7 @@ switch dataSetSel
         K=165;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=11;
 
     case 3
         disp('COIL20 data set selected...')
@@ -29,14 +31,17 @@ switch dataSetSel
         K=1440;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=11; 
 
     case 4
         disp('Cuprite HSI selected...')
         load('V.mat');
         AA = V;
+        clear V;
         K=180;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=12; 
 
     case 5
         disp('SanDiedo HSI selected...')
@@ -45,6 +50,7 @@ switch dataSetSel
         K=5;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=8; 
     case 6
         disp('mnist data set selected...')
         load('mnist_all.mat');
@@ -60,11 +66,12 @@ switch dataSetSel
         K=1400;
         %%% selection of a subset of data
         X = double(AA(:,:,1:K));
+        R=10;
     
     case 7
         disp('synthetic data set selected...')
-        n=9;  
-        R=13;      
+        n=9;  %30
+        R=13; %45     
         % Generating a nonnegative tensor
         A{1}=rand(n,R);
         A{2}=rand(n,R);
@@ -108,7 +115,7 @@ end
 % Solve set of ODE by CNO along with PSO
 % -----------------------------------------------------
 %%% Main parameters
-maxIter = 5;
+maxIter = 10;
 verbose = 1;
 
 %%% Init of misc variables
@@ -130,7 +137,7 @@ options_CS.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
 options_DS.maxIter = 500;
 options_DS.verbose = 1;
 options_DS.initType = 3;
-options_DS.R = 12; %11 for Yale, 12 for Cuprite
+options_DS.R = R; %11 for Yale, 12 for Cuprite
 options_DS.beta =.2;
 options_DS.alpha =.2;
 options_DS.delta = 0;
@@ -170,7 +177,7 @@ for j=1:maxIter
         fprintf('\n')
     end
 
-    %%% Call of PSO
+    %%% PSO
     %%%% Computation of p_best
     if j==1
         tt_h=min(min(ee(:,1:j)));
@@ -190,7 +197,6 @@ for j=1:maxIter
     %%%% Update of the velocity and particle positions
     w=0;
     for i=1:NN
-        % [ii,jj]=min(ee(i,:));
         %%%% Computation of p_n : the best location of the n-th particle
         [ii,jj]=min(ee(i,1:j));
         p_n = y{i,jj};
