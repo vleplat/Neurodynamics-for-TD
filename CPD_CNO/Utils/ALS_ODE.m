@@ -12,7 +12,7 @@ function [err_ode,err_ode2,cpu_time,B] = ALS_ODE(X,epsilon,theta,tspan,options)
 %       - err_ode: 
 %       - err_ode2:
 %       - cpu_time: the cpu time.
-%       - B: cell of arrays with the factors of the CPD
+%       - B: array of cells containing the factors of the CPD
 %-------------------------------------------------------------
 
 % Loading parameters
