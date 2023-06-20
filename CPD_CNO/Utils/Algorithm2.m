@@ -36,7 +36,9 @@ tX = tensor(X);
 %%% Init. for the factors
 switch initType
     case 1
-        disp('Random init.')
+        if options.verbose
+            disp('Random init.')
+        end
         % Random
         sizeX = size(X);
         A_10 = rand(sizeX(1),R);
@@ -47,7 +49,9 @@ switch initType
         A_3{1} = A_30;
 
     case 2
-        disp('Init. using mixed strategies')
+        if options.verbose
+            disp('Init. using mixed strategies')
+        end
         opts = cp_init();
         opts.init = {'rand' 'fiber' 'fiber' }; %rand fiber fiber
         Ui = cp_init(tensor(X),R,opts);
@@ -59,7 +63,9 @@ switch initType
         A_3{1} = A_30;
 
     case 3
-        disp('Init. given')
+        if options.verbose
+            disp('Init. given')
+        end
         A_1{1} = options.U0{1};
         A_2{1} = options.U0{2};
         A_3{1} = options.U0{3};
