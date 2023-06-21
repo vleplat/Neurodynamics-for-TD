@@ -2,60 +2,18 @@ clc;clear all
 %% ---------------------------------------------------------
 % Data init.
 % ----------------------------------------------------------
-dataSetSel = 4; % Select data set 4
-switch dataSetSel
-    case 1
-        disp('ORL data set selected...')
-        load('ORL_32x32.mat');
-        AA=permute(reshape(fea,[400,32,32]),[2,3,1]);
-        K=400;
+dataSetSel = 7; 
+sizeSynthetic(1) = 9;
+sizeSynthetic(2) = 13;
+[X,R] = data_Loader(dataSetSel,sizeSynthetic);
+% 1: ORL data set
+% 2: Yale data set
+% 3: COIL20 data set
+% 4: Cuprite HSI
+% 5: SanDiedo HSI
+% 6: mnist data set
+% 7: synthetic data set
 
-    case 2
-        disp('Yale data set selected...')
-        % load('Yale_32x32.mat');
-        load('Yale_64x64.mat');
-        si = 64; %64
-        AA=permute(reshape(fea,[165,si,si]),[2,3,1]);
-        K=165;
-
-    case 3
-        disp('COIL20 data set selected...')
-        load('COIL20.mat');
-        AA=permute(reshape(fea,[1440,32,32]),[2,3,1]);
-        K=1440;
-
-    case 4
-        disp('Cuprite HSI selected...')
-        load('V.mat');
-        AA = V;
-        K=180;
-
-    case 5
-        disp('SanDiedo HSI selected...')
-        [Xsub] = SanDiego_preProc(1);
-        AA=permute(reshape(Xsub,[5,400,400]),[2,3,1]);
-        K=5;
-    case 6
-        disp('mnist data set selected...')
-        load('mnist_all.mat');
-        AA_cell{1}=test0; AA_cell{2}=test1; AA_cell{3}=test2;
-        AA_cell{4}=test3; AA_cell{5}=test4; AA_cell{6}=test5;
-        AA_cell{7}=test6; AA_cell{8}=test7; AA_cell{9}=test8;
-        AA_cell{10}=test9; 
-        for j = 1:10
-            for i=1:140
-                AA(:,:,(j-1)*140+i) = (reshape(AA_cell{j}(i,:),[28,28]))';
-            end
-        end
-        K=1400;
-
-    otherwise
-        disp('wrong selection for the data set...')
-        return
-end
-
-%%% selection of a subset of data
-X=double(AA(:,:,1:K));
 X=X/max(X(:));
 tX = tensor(X);
 
@@ -63,7 +21,7 @@ tX = tensor(X);
 options.maxIter = 500;
 options.verbose = 1;
 options.initType = 3;
-options.R =12; %11 for Yale, 12 for Cuprite
+options.R = R; 
 options.beta =.2;
 options.alpha =.2;
 options.delta = 0;
@@ -73,7 +31,7 @@ options.delta = 0;
 sizeX = size(X);
 A_10 = rand(sizeX(1),options.R);
 A_20 = rand(sizeX(2),options.R);
-A_30 = rand(K,options.R);
+A_30 = rand(sizeX(3),options.R);
 options.U0{1} = A_10;
 options.U0{2} = A_20;
 options.U0{3} = A_30;
