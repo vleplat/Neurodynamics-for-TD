@@ -3,42 +3,17 @@ clc;clear all; close all
 % Loading data set
 %--------------------------------------------------------------------------
 %warning off
-%ex = 'ORL';
-% ex = 'Yale';
-ex = 'rand';
-switch  ex
-    case 'rand'
-        n=30;  
-        R=40;      
-        % Generating a nonnegative tensor
-        A{1}=rand(n,R);
-        A{2}=rand(n,R);
-        A{3}=rand(n,R);
-      
-        X=double(full(ktensor(ones(R,1),A{1},A{2},A{3})));
-        % X=nasob23(3,3,3);R = 23;
-
-    case  'ORL'
-        % for mnist
-        disp('ORL data set selected...')
-        load('ORL_32x32.mat');
-        AA=permute(reshape(fea,[400,32,32]),[2,3,1]);
-        K=400;
-        X=double(AA(:,:,1:K));
-        %X=X/max(X(:));
-        R=35;
-
-     case 'Yale'
-        disp('Yale data set selected...')
-        % load('Yale_32x32.mat');
-        load('Yale_64x64.mat');
-        si = 64; %64
-        AA=permute(reshape(fea,[165,si,si]),[2,3,1]);
-        K=30;
-        X=double(AA(:,:,1:K));
-        X=X/max(X(:));
-        R=20;
-end
+dataSetSel = 7; 
+sizeSynthetic(1) = 9;
+sizeSynthetic(2) = 13;
+[X,R] = data_Loader(dataSetSel,sizeSynthetic);
+% 1: ORL data set
+% 2: Yale data set
+% 3: COIL20 data set
+% 4: Cuprite HSI
+% 5: SanDiedo HSI
+% 6: mnist data set
+% 7: synthetic data set
 Szx=size(X);
 N = ndims(X);
 %% ------------------------------------------------------------------------
