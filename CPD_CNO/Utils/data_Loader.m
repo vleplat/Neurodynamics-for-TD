@@ -38,6 +38,9 @@ switch dataSetSel
         clear V;
         K=180;
         %%% selection of a subset of data
+        AA=AA(30:80,30:80,:);
+        AA=AA/max(AA(:));
+        AA=max(AA,eps);
         X = double(AA(:,:,1:K));
         R=12; 
 

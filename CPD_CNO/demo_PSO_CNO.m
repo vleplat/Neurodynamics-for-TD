@@ -1,9 +1,10 @@
 clear all;clc;close all;
 warning("off");
+rng(2024)
 %% ----------------------------------------------------
 % Data loading
 % -----------------------------------------------------
-dataSetSel = 7; 
+dataSetSel = 4; 
 sizeSynthetic(1) = 9;
 sizeSynthetic(2) = 13;
 [X,R] = data_Loader(dataSetSel,sizeSynthetic);
@@ -34,13 +35,15 @@ options_gen.initType = 1;
 %%% Parameters for solver based on ode45
 options_CS = odeset;
 options_CS.NonNegative = 1;
-options_CS.maxKrun = 10;
+options_CS.maxKrun = 1;
 options_CS.R = R;
 options_CS.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
-options_CS.maxTime = 50;
-options_CS.epsilon(1)=10^(-4);
-options_CS.epsilon(2)=10^(-4);
-options_CS.epsilon(3)=10^(-4);
+options_CS.tSpanEnd = 0.004;
+options_CS.NbComputationPoints = 100;
+alpha = 1;
+options_CS.epsilon(1)=alpha*10^(-4);
+options_CS.epsilon(2)=alpha*10^(-4);
+options_CS.epsilon(3)=alpha*10^(-4);
 
 %%% Parameters for the Discrete Solver
 options_DS.maxIter = 300;

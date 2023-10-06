@@ -1,4 +1,5 @@
 clc;clear all; close all
+rng(2024)
 % ------------------------------------------------------------------------
 % Loading data set
 %--------------------------------------------------------------------------
@@ -6,7 +7,8 @@ clc;clear all; close all
 %ex = 'ORL';
 % ex = 'Yale';
 %ex = 'rand';
-ex='dc';
+%ex='dc';
+ex='cuprite';
 switch  ex
     case 'rand'
         n=9;  
@@ -45,6 +47,15 @@ switch  ex
         X=max(X,eps);
         X=X/max(X(:));
         R=5;
+
+    case 'cuprite'
+        disp('Cuprite data set selected...')
+        load('V.mat');
+        X = V; clear V;
+        X=X(30:80,30:80,:); % X=X(:,:,1:180);
+        X=X/max(X(:));
+        X=max(X,eps);
+        R=12;
 end
 Szx=size(X);
 N = ndims(X);
@@ -62,9 +73,10 @@ B0 = Yx.U;
 % Call of ALS+ODE45 solver (proposed by Prof Phan)
 %--------------------------------------------------------------------------
 % Time constant for three-scale neurodynamics
-epsilon.eps_1=1e-4;
-epsilon.eps_2=1e-4;
-epsilon.eps_3=1e-4;
+alpha = 1;
+epsilon.eps_1=alpha*1e-4;
+epsilon.eps_2=alpha*1e-4;
+epsilon.eps_3=alpha*1e-4;
 % 
 % epsilon.eps_1=1;
 % epsilon.eps_2=1;
@@ -73,18 +85,19 @@ epsilon.eps_3=1e-4;
 
 % Initial point for ODE
 theta0 = fac2vec(B0);
-tspan = linspace(0,0.01,50); % [0 0.02]
-
+tspan = linspace(0,0.004,100); % [0 0.02] % tspan = linspace(0,0.01,50);
+% tspan = [0 0.01];
 % Misc options 
 options = odeset;
 options.NonNegative = 1;
-options.maxKrun = 10;
+options.maxKrun = 1;
 options.R = R;
 options.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
 
 % Call of solver
 [err_ode,err_ode2,cpu_time,B_ode] = ALS_ODE(X,epsilon,theta0,tspan,options);
 time_0 = cpu_time;
+err_ode(end)
 
 %%
 Pn = normalize(ktensor(B_ode));
@@ -157,7 +170,7 @@ time_0 = cpu_time;
 %--------------------------------------------------------------------------
 opts = ncp_hals;
 opts.init = B0;
-opts.maxiters = 550;
+opts.maxiters = 100;
 opts.tol = 1e-10;
 tic
 [Yx_ncp_hals,out_ncp_hals] = ncp_hals(tensor(X),R,opts);
@@ -212,7 +225,7 @@ yt_ncp_hals=1-out_ncp_hals.Fit(:,2);
 %--------------------------------------------------------------------------
 opts = ncp_mls;
 opts.init = B0;
-opts.maxiters = 550;
+opts.maxiters = 100;
 opts.tol = 1e-10;
 tic
 [Yx_ncp_mls,out_ncp_mls] = ncp_mls(tensor(X),R,opts);
@@ -225,11 +238,14 @@ yt_ncp_mls=1-out_ncp_mls.Fit(:,2);
 % Post-processing
 %--------------------------------------------------------------------------
 fontSize = 14;
-t=1:10:550;
+t=1:10:100; %t=1:10:550
 
 figure(1)
 clf
-semilogy([err_ode(1:end-10) err_ode2(1:end-10)],'--','LineWidth',3)
+% semilogy([err_ode(1:end-10) err_ode2(1:end-10)],'-','LineWidth',3)
+semilogy([err_ode(1:end-10) ],'-.','LineWidth',3)
+% semilogy([err_ode(1:end-10)],'-','LineWidth',3)
+% semilogy([err_ode],'--','LineWidth',3)
 hold on;text{1} = "ALS-ODE45";
 %semilogy(t,ert_anls(t),'->','LineWidth',3,'color','blue')
 %hold on;text{2} = "ANLS";
@@ -246,11 +262,15 @@ hold on;text{1} = "ALS-ODE45";
 semilogy(t,yt_ncp_mls(t),'-hexagram','color','black','LineWidth',3)
 hold on;text{9} = "MUR";
 gg=size(yt_ncp_hals);
+% gg =100;
 t=1:10:gg;
 semilogy(t,yt_ncp_hals(t),'-x','LineWidth',3)
 hold on;text{8} = "HALS";
+xlabel('iteration counter $k$',"Interpreter","latex")
+ylabel('$\| \mathcal{X} - \mathcal{I} \times_1 U^{(1)} \times_2 U^{(2)} \times_3 U^{(3)} \|_F^2$',"Interpreter","latex")
+grid on;
+legend('ODE','MUR','HALS',"Interpreter","latex")
 
-legend('ODE','MUR','HALS')
 
 % legend(text,'interpreter','latex')
 % xlabel('Number of iterations','fontsize',fontSize,'interpreter','latex')

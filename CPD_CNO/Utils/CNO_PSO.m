@@ -15,7 +15,6 @@ maxIter = options_gen.maxIter;
 verbose = options_gen.verbose;
 selAlgo = options_gen.selAlgo;
 initType = options_gen.initType;
-maxTime = options_CS.maxTime;
 epsilon.eps_1=options_CS.epsilon(1);
 epsilon.eps_2=options_CS.epsilon(2);
 epsilon.eps_3=options_CS.epsilon(3);
@@ -48,7 +47,7 @@ ee = zeros(NN,maxIter);
 DI = zeros(1,maxIter);
 
 %%% Parameters for solver based on ode45
-tspan = linspace(0,0.01,maxTime); % [0 0.02]
+tspan = linspace(0,options_CS.tSpanEnd,options_CS.NbComputationPoints); % [0 0.02]
 
 %%% Init for velocity vectors for PSO method
 fprintf('--------------------------------------------------------------------------------------')
@@ -124,6 +123,9 @@ for j=1:maxIter
         [~,jj]=min(ee(i,1:j));
         p_n = y{i,jj};
         [y0{i,1},V{i}]=PSO_Code(V{i},y{i,j},p_n,pbest);
+        if options_CS.NonNegative
+            y0{i,1} = max(y0{i,1},0);
+        end
         w=w+norm(p_n-pbest);
     end
     DI(j)=w/NN;

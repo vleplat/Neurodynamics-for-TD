@@ -27,7 +27,7 @@ tim = tic;
 
 % Main Loop
 for krun = 1:maxKrun
-    [~,yode] = ode45(@(t,xx) ODE_sol(t,xx,X,epsilon,R,algo_Sel), tspan, theta,options);
+    [~,yode] = ode78(@(t,xx) ODE_sol(t,xx,X,epsilon,R,algo_Sel), tspan, theta,options);
 
     clear err_ode2;
     for k = 1:size(yode,1)
