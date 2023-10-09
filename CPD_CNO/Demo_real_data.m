@@ -4,58 +4,56 @@ rng(2024)
 % Loading data set
 %--------------------------------------------------------------------------
 %warning off
-%ex = 'ORL';
-% ex = 'Yale';
-%ex = 'rand';
-%ex='dc';
+
 ex='cuprite';
+% ex='urban';
+% ex='jasper';
+% ex='SanDiego';
+% ex='Samson';
 switch  ex
-    case 'rand'
-        n=9;  
-        R=10;      
-        % Generating a nonnegative tensor
-        A{1}=rand(n,R);
-        A{2}=rand(n,R);
-        A{3}=rand(n,R);
-      
-        X=double(full(ktensor(ones(R,1),A{1},A{2},A{3})));
-        % X=nasob23(3,3,3);R = 23;
-
-    case  'ORL'
-        % for mnist
-        disp('ORL data set selected...')
-        load('ORL_32x32.mat');
-        AA=permute(reshape(fea,[400,32,32]),[2,3,1]);
-        K=400;
-        X=double(AA(:,:,1:K));
-        %X=X/max(X(:));
-        R=35;
-
-     case 'Yale'
-        disp('Yale data set selected...')
-        % load('Yale_32x32.mat');
-        load('Yale_64x64.mat');
-        si = 64; %64
-        AA=permute(reshape(fea,[165,si,si]),[2,3,1]);
-        K=30;
-        X=double(AA(:,:,1:K));
-        X=X/max(X(:));
-        R=10;
-    case 'dc'
-        X=double(imread('dc.tif'));
-        X=X(100:120,100:120,1:10);
-        X=max(X,eps);
-        X=X/max(X(:));
-        R=5;
-
     case 'cuprite'
         disp('Cuprite data set selected...')
         load('V.mat');
         X = V; clear V;
-        X=X(30:80,30:80,:); % X=X(:,:,1:180);
+        % X=X(30:80,30:80,:); % X=X(:,:,1:180);
+        X=X(:,:,1:180);
         X=X/max(X(:));
         X=max(X,eps);
         R=12;
+     case 'urban'
+        disp('Urban data set selected...')
+        load('Urban.mat');
+        X = reshape(A,[307 307 162]); clear A;
+        X=X(120:120+119,120:120+119,:); %X=X(120:120+119,120:120+119,:);
+%         X=X/max(X(:));
+%         X=max(X,eps);
+        R=6;
+
+    case 'jasper'
+        disp('Jasper Ridge data set selected...')
+        load('jasperRidge2_R198.mat');
+        X = reshape(Y',[100 100 198]); clear Y;
+        % X=X/max(X(:));
+        % X=max(X,eps);
+        R=4;
+
+    case 'SanDiego'
+        disp('SanDiego data set selected...')
+        load('SanDiego.mat');
+        X = reshape(A,[400 400 158]); clear A;
+        X=X(120:120+119,120:120+119,:);
+        X=X/max(X(:));
+        X=max(X,eps);
+        R=4;
+
+    case 'Samson'
+        disp('Samson data set selected...')
+        load('samson_1.mat');
+        X = reshape(V',[95 95 156]); clear V;
+        % X=X/max(X(:));
+        %X=max(X,eps);
+        R=3;
+
 end
 Szx=size(X);
 N = ndims(X);
@@ -73,7 +71,7 @@ B0 = Yx.U;
 % Call of ALS+ODE45 solver (proposed by Prof Phan)
 %--------------------------------------------------------------------------
 % Time constant for three-scale neurodynamics
-alpha = 1;
+alpha = 0.5;
 epsilon.eps_1=alpha*1e-4;
 epsilon.eps_2=alpha*1e-4;
 epsilon.eps_3=alpha*1e-4;
@@ -100,10 +98,10 @@ time_0 = cpu_time;
 err_ode(end)
 
 %%
-Pn = normalize(ktensor(B_ode));
-theta0 = fac2vec(Pn.U);
-[err_ode,err_ode2,cpu_time,B_ode] = ALS_ODE(X,epsilon,theta0,tspan,options);
-time_0 = cpu_time;
+% Pn = normalize(ktensor(B_ode));
+% theta0 = fac2vec(Pn.U);
+% [err_ode,err_ode2,cpu_time,B_ode] = ALS_ODE(X,epsilon,theta0,tspan,options);
+% time_0 = cpu_time;
 
 %% ------------------------------------------------------------------------
 % Call of ANLS solver (Put reference)
@@ -284,6 +282,14 @@ legend('ODE','MUR','HALS',"Interpreter","latex")
 % Yg = [time_0 time_1 time_2 time_3 time_4 time_5 time_6 time_7 time_7];
 % bar(Xg,Yg)
 % ylabel('Running time (Second)')
+
+figure;
+for r=1:R
+    plot(B_ode{3}(:,r)/max(B_ode{3}(:,r))); hold on;
+end
+grid on
+xlabel("Wavelength Id","Interpreter","latex")
+ylabel("Intensity","Interpreter","latex")
 %%
 
 % figure(2)

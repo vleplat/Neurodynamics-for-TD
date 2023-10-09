@@ -38,7 +38,8 @@ switch dataSetSel
         clear V;
         K=180;
         %%% selection of a subset of data
-        AA=AA(30:80,30:80,:);
+        % AA=AA(30:80,30:80,:);
+        AA=AA(:,:,1:180);
         AA=AA/max(AA(:));
         AA=max(AA,eps);
         X = double(AA(:,:,1:K));
@@ -78,6 +79,15 @@ switch dataSetSel
         A{2}=rand(n,R);
         A{3}=rand(n,R);
         X=double(full(ktensor(ones(R,1),A{1},A{2},A{3})));
+
+    case 8
+        disp('Urban data set selected...')
+        load('Urban.mat');
+        X = reshape(A,[307 307 162]); clear A;
+        X=X(120:120+119,120:120+119,:); %X=X(120:120+119,120:120+119,:);
+        X=X/max(X(:));
+        X=max(X,eps);
+        R=6;
 
     otherwise
         disp('wrong selection for the data set...')
