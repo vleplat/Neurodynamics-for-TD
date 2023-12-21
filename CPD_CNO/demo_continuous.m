@@ -27,7 +27,7 @@ opts.tol = 1e-10;
 B0 = Yx.U;
 
 %% ------------------------------------------------------------------------
-% Call of ALS+ODE45 solver (proposed by Prof Phan)
+% Call of ALS+ODE45 solver
 %--------------------------------------------------------------------------
 % Time constant for three-scale neurodynamics
 epsilon.eps_1=1e-4;
