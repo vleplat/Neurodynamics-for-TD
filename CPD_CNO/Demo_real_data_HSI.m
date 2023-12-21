@@ -119,6 +119,7 @@ t=1:10:100;
 
 % % Error plots
 figure(1)
+set(0, 'DefaultAxesFontSize', fontSize);
 clf
 semilogy([err_ode(1:end-10) ],'-.','LineWidth',3)
 hold on;text{1} = "ODE";
@@ -128,8 +129,10 @@ gg=size(yt_ncp_hals);
 t=1:10:gg;
 semilogy(t,yt_ncp_hals(t),'-x','LineWidth',3)
 hold on;text{3} = "HALS";
-xlabel('iteration counter $k$',"Interpreter","latex",'FontSize',fontSize)
-ylabel('$\frac{\| \mathcal{X} - \mathcal{I} \times_1 U^{(1)} \times_2 U^{(2)} \times_3 U^{(3)} \|_F^2}{\| \mathcal{X} \|_F^2}$',"Interpreter","latex",'FontSize',fontSize)
+% xlabel('iteration counter $k$',"Interpreter","latex",'FontSize',fontSize)
+%ylabel('$\frac{\| \mathcal{X} - \mathcal{I} \times_1 U^{(1)} \times_2 U^{(2)} \times_3 U^{(3)} \|_F^2}{\| \mathcal{X} \|_F^2}$',"Interpreter","latex",'FontSize',fontSize)
+xlabel('Number of iterations',"Interpreter","latex",'FontSize',fontSize)
+ylabel('Relative Error',"Interpreter","latex",'FontSize',fontSize)
 grid on;
 legend(text,'FontSize',fontSize, 'Interpreter','latex')
 
