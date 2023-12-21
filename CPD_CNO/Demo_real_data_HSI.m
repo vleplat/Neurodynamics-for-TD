@@ -5,8 +5,8 @@ rng(2024)
 %--------------------------------------------------------------------------
 %warning off
 
-ex='cuprite';
-% ex='urban';
+% ex='cuprite';
+ex='urban';
 % ex='jasper';
 % ex='SanDiego';
 % ex='Samson';
@@ -68,7 +68,7 @@ opts.tol = 1e-10;
 B0 = Yx.U;
 
 %% ------------------------------------------------------------------------
-% Call of ALS+ODE45 solver (proposed by Prof Phan)
+% Call of ALS+ODE45 solver
 %--------------------------------------------------------------------------
 % Time constant for three-scale neurodynamics
 alpha = 0.5;
