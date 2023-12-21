@@ -31,7 +31,7 @@ for i=1:NN
     else 
         opts = cp_init();
         opts.init = {'orth' 'fiber' 'rand' };
-        Ui = cp_init(tensor(X),RR,opts);
+        Ui = cp_init(tensor(X),R,opts);
         B{i,1} = Ui{1};
         B{i,2} = Ui{2};
         B{i,3} = Ui{3};
