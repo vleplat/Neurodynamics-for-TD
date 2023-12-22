@@ -5,7 +5,7 @@ This MATLAB software reproduces the results from the following paper:
 
 ```
 @misc{SalmanAhmadi-Asl2023,
-      title={Nonnegative Tensor Decomposition Via Collaborative Neurodynamic Optimizatio}, 
+      title={Nonnegative Tensor Decomposition Via Collaborative Neurodynamic Optimization}, 
       author={Salman Ahmadi-Asl and Valentin Leplat and Anh Huy Phan and Jun Wang and Andrzej Cichocki},
       year={2023},
       eprint={},
