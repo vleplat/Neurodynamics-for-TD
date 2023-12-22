@@ -172,3 +172,6 @@ semilogy(t,yt_ncp_hals(t),'-x','LineWidth',3)
 hold on;text{8} = "HALS";
 
 legend('ODE','ANLS','Proco-ALS','CCG','BFGSP','GradP','MUR','HALS')
+
+xlabel('Number of iterations')
+ylabel('Relatiev error')
