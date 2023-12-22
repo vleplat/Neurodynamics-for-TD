@@ -3,11 +3,11 @@ clc;clear all; close all
 % Generate a random tensor of size 20 x 20 x 20 and tensor rank 10 and last
 % light colinear factor matrix
 %--------------------------------------------------------------------------
-        n=20;  
-        R=10;      
+n=20;  
+R=10;      
 % Generating a nonnegative tensor with one or two high colinear factor
 % matrices 
-        op=2;
+op=2;
 switch op
     case 1
 c = [0.4 0.6;  0.4 0.6;  0.95 0.99];

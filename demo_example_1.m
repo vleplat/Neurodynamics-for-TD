@@ -2,14 +2,14 @@ clc;clear all; close all
 % ------------------------------------------------------------------------
 % Generate a random tensor of size 9 x 9 x 9 and tensor rank 10
 %--------------------------------------------------------------------------
-        n=9;  
-        R=10;      
-        % Generating a nonnegative tensor
-        A{1}=rand(n,R);
-        A{2}=rand(n,R);
-        A{3}=rand(n,R);
-      
-        X=double(full(ktensor(ones(R,1),A{1},A{2},A{3})));
+n=9;  
+R=10;      
+% Generating a nonnegative tensor
+A{1}=rand(n,R);
+A{2}=rand(n,R);
+A{3}=rand(n,R);
+
+X=double(full(ktensor(ones(R,1),A{1},A{2},A{3})));
 Szx=size(X);
 N = ndims(X);
 %% ------------------------------------------------------------------------
