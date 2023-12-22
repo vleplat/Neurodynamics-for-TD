@@ -1,13 +1,13 @@
-clc;clear all; close all
+clc;clear all; close all % comment this line if you run the benchmark_HSI script
 rng(2024)
 % ------------------------------------------------------------------------
 % Loading data set
 %--------------------------------------------------------------------------
 %warning off
 
-ex='cuprite';
+% ex='cuprite';
 % ex='urban';
-% ex='jasper';
+ex='jasper';
 % ex='SanDiego';
 % ex='Samson';
 switch  ex
@@ -146,3 +146,4 @@ grid on
 xlabel("Wavelength Id","Interpreter","latex")
 ylabel("Intensity","Interpreter","latex")
 
+save variables.mat;
