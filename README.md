@@ -32,6 +32,6 @@ The baseline algorithms used in the manuscript are courtesy of their respective 
  
  Test files are available. To proceed, open and start one of the following files:
  
-- benchmark_HSI.m : run benchmark for Hyperspectral Images data set, see section 7-Example 4 of th paper.
+- benchmark_HSI.m : run benchmark for Hyperspectral Images data set, see section 7-Example 4 of the paper.
 - 
 
