@@ -20,7 +20,7 @@ The baseline algorithms used in the manuscript are courtesy of their respective 
 
 ## Content
  
- - /Libraries : contains helpful libaries
+ - /libraries : contains helpful libaries.
  
  - /Datasets : contains test data sets.
 
