@@ -44,7 +44,7 @@ options = odeset;
 options.NonNegative = 1;
 options.maxKrun = 10;
 options.R = R;
-options.algo_Sel = 'als2'; % 'als', 'als2', 'hals2', 'hals'
+options.algo_Sel = 'als2'; 
 
 % Call of solver
 [err_ode,err_ode2,cpu_time,B_ode] = ALS_ODE(X,epsilon,theta0,tspan,options);
