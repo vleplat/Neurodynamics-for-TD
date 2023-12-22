@@ -34,4 +34,5 @@ The baseline algorithms used in the manuscript are courtesy of their respective 
  
 - benchmark_HSI.m : run benchmark for Hyperspectral Images data set, see section 7-Example 4 of the paper.
 - demo_experiment_1 : the code associated with Example 1 of Section 7 of the paper.
+- demo_experiment_2 : the code associated with Example 2 of Section 7 of the paper.
 
