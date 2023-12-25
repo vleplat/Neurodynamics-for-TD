@@ -1,5 +1,5 @@
 # Nonnegative Tensor Decomposition Via Collaborative Neurodynamic Optimization
-Neurodymanics and ODE-based methods for computing Canonical Polyadic Decompositions (CPD) of tensors under constraints
+This project is dedicated to the development of Neurodymanics and ODE-based methods for computing Canonical Polyadic Decompositions (CPD) of tensors under constraints. A specific emphasis is put on the nonnegative constraints, but methods can be easily extended to other (simple) constraints such as box, unit ball and unit simplex constraints.
 
 This MATLAB software reproduces the results from the following paper:
 
@@ -33,6 +33,6 @@ The baseline algorithms used in the manuscript are courtesy of their respective 
  Test files are available. To proceed, open and start one of the following files:
  
 - benchmark_HSI.m : run benchmark for Hyperspectral Images data set, see section 7-Example 4 of the paper.
-- demo_experiment_1 : the code associated with Example 1 of Section 7 of the paper.
-- demo_experiment_2 : the code associated with Example 2 of Section 7 of the paper.
+- demo_experiment_1.m : the code associated with Example 1 of Section 7 of the paper.
+- demo_experiment_2.m : the code associated with Example 2 of Section 7 of the paper.
 
